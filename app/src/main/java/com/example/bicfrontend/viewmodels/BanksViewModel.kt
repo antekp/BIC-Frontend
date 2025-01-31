@@ -4,6 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.bicfrontend.network.BanksApi
+import kotlinx.coroutines.launch
 
 class BanksViewModel : ViewModel() {
     var BICUiState: String by mutableStateOf("")
@@ -11,11 +14,14 @@ class BanksViewModel : ViewModel() {
 
 
     init {
-        getbanks()
+        getBanks()
     }
 
 
-    fun getbanks() {
-        BICUiState = "Set the Mars API status response here!"
+    private fun getBanks() {
+        viewModelScope.launch {
+            val listResult = BanksApi.retrofitService.getBanks()
+            BICUiState = listResult
+        }
     }
 }
