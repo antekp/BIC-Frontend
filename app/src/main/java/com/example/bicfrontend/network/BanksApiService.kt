@@ -1,10 +1,14 @@
 package com.example.bicfrontend.network
 
 
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 
@@ -21,8 +25,13 @@ interface BanksApiService {
 
     @GET("/banks/swift-codes/country/{countryISO2}")
     suspend fun getBanksByCountry(@Path("countryISO2") countryISO2: String): CountryResponse
-}
 
+    @DELETE("/banks/{swiftCode}")
+    suspend fun deleteBank(@Path("swiftCode") swiftCode: String): Response<Unit>
+
+    @POST("/banks")
+    suspend fun insertBank(@Body bank: BankRequest): Response<Void>
+}
 
 object BanksApi {
     val retrofitService: BanksApiService by lazy {

@@ -10,7 +10,7 @@ data class BankResponse(
     @SerializedName("countryName") val countryName: String,
     @SerializedName("isHeadquarter") val isHeadquarter: Boolean,
     @SerializedName("swiftCode") val swiftCode: String,
-    @SerializedName("branches") val branches: List<BankResponse>? = null // Może być `null`
+    @SerializedName("branches") val branches: List<BankResponse>? = null
 )
 data class CountryResponse(
     @SerializedName("countryISO2") val countryISO2: String,
@@ -24,4 +24,14 @@ data class SwiftCodeResponse(
     @SerializedName("isHeadquarter") val isHeadquarter: Boolean,
     @SerializedName("swiftCode") val swiftCode: String
 )
+data class BankRequest(
+    @SerializedName("country_iso2_code") val countryISO2: String,
+    @SerializedName("swift_code") val swiftCode: String,
+    @SerializedName("bank_name") val bankName: String,
+    @SerializedName("address") val address: String,
+    @SerializedName("town_name") val townName: String,
+    @SerializedName("country_name") val countryName: String,
+    @SerializedName("is_headquater") val isHeadquarter: Boolean
+)
+
 
