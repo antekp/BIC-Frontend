@@ -8,9 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bicfrontend.network.BankResponse
 import com.example.bicfrontend.network.BanksApi
+import com.example.bicfrontend.network.CountryResponse
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+
+
 
 class BanksViewModel : ViewModel() {
     var BICUiState by mutableStateOf<BankUiState>(BankUiState.Loading)
@@ -18,9 +21,32 @@ class BanksViewModel : ViewModel() {
 
     var swiftCode: String by mutableStateOf("")
 
+    var countryUiState by mutableStateOf<CountryUiState>(CountryUiState.Loading)
+        private set
+
     fun updateSwiftCode(newCode: String) {
+        BICUiState = BankUiState.Loading
         swiftCode = newCode
-        Log.d("VIEWMODEL_UPDATE", "swiftCode updated: $swiftCode")
+    }
+    fun getBanksByCountry(countryISO2: String) {
+        if (countryISO2.isBlank()) return
+
+        viewModelScope.launch {
+            try {
+                Log.d("API_CALL", "Fetching banks for country: $countryISO2")
+                val response = BanksApi.retrofitService.getBanksByCountry(countryISO2)
+
+                if (response.swiftCodes.isNotEmpty()) {
+                    countryUiState = CountryUiState.Success(response)
+                } else {
+                    countryUiState = CountryUiState.Error("Brak banków dla tego kraju")
+                }
+            } catch (e: HttpException) {
+                countryUiState = CountryUiState.Error("Błąd serwera")
+            } catch (e: IOException) {
+                countryUiState = CountryUiState.Error("Brak połączenia z serwerem")
+            }
+        }
     }
 
     fun getBanks() {
@@ -29,26 +55,26 @@ class BanksViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 Log.d("API_CALL", "Sending request for SWIFT: $swiftCode")
-                val bankData = BanksApi.retrofitService.getBanks(swiftCode)
+                val response = BanksApi.retrofitService.getBanks(swiftCode)
 
-                if (bankData.bankName.isBlank()) {  // Jeśli odpowiedź jest pusta, uznajmy, że bank nie istnieje
-                    Log.e("API_ERROR", "Bank not found for SWIFT: $swiftCode")
-                    BICUiState = BankUiState.Error("Bank doesn't exists")
+                if (response.isHeadquarter) {
+                    Log.d("API_CALL", "Received HeadquarterResponse: ${response.bankName}")
+                    BICUiState = BankUiState.Success(response)
                 } else {
-                    BICUiState = BankUiState.Success(bankData)
+                    Log.d("API_CALL", "Received BranchResponse: ${response.bankName}")
+                    BICUiState = BankUiState.Success(response)
                 }
-
             } catch (e: HttpException) {
                 if (e.code() == 404) {
                     Log.e("API_ERROR", "404 Not Found for SWIFT: $swiftCode")
-                    BICUiState = BankUiState.Error("Bank doesn't exists")
+                    BICUiState = BankUiState.Error("Bank nie istnieje")
                 } else {
                     Log.e("API_ERROR", "Network error", e)
-                    BICUiState = BankUiState.Error("Network error")
+                    BICUiState = BankUiState.Error("Wystąpił błąd sieci")
                 }
             } catch (e: IOException) {
                 Log.e("API_ERROR", "Network error occurred", e)
-                BICUiState = BankUiState.Error("Failed to connect with server")
+                BICUiState = BankUiState.Error("Brak połączenia z serwerem")
             }
         }
     }
@@ -57,4 +83,9 @@ sealed interface BankUiState {
     data class Success(val banks: BankResponse) : BankUiState
     data class Error(val message: String) : BankUiState  // Przechowuje wiadomość błędu
     object Loading : BankUiState
+}
+sealed interface CountryUiState {
+    data class Success(val country: CountryResponse) : CountryUiState
+    data class Error(val message: String) : CountryUiState
+    object Loading : CountryUiState
 }

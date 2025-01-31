@@ -18,7 +18,11 @@ private val retrofit = Retrofit.Builder()
 interface BanksApiService {
     @GET("/banks/bySwift/{swiftCode}")
     suspend fun getBanks(@Path("swiftCode") swiftCode: String): BankResponse
+
+    @GET("/banks/swift-codes/country/{countryISO2}")
+    suspend fun getBanksByCountry(@Path("countryISO2") countryISO2: String): CountryResponse
 }
+
 
 object BanksApi {
     val retrofitService: BanksApiService by lazy {

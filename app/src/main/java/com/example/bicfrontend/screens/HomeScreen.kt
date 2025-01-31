@@ -40,86 +40,126 @@ import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bicfrontend.R
-import com.example.bicfrontend.network.BankResponse
 
 import com.example.bicfrontend.viewmodels.BankUiState
 import com.example.bicfrontend.viewmodels.BanksViewModel
+import com.example.bicfrontend.viewmodels.CountryUiState
 
 @Composable
 fun HomeScreen(viewModel: BanksViewModel) {
     var swiftCode by remember { mutableStateOf("") }
+    var countryCode by remember { mutableStateOf("") }
+
     val uiState by remember { derivedStateOf { viewModel.BICUiState } }
+    val countryState by remember { derivedStateOf { viewModel.countryUiState } }
+
     val context = LocalContext.current
     val view = LocalView.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()), // 🔹 Wymuszenie przewijalności
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // TextField + Button w jednym rzędzie
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            TextField(
-                value = swiftCode,
-                onValueChange = { newValue ->
-                    swiftCode = newValue.uppercase() // Zamiana liter na wielkie
-                },
-                label = { Text("Enter SWIFT Code") },
-                modifier = Modifier.weight(1f)
-            )
+        // 🔹 TextField do wyszukiwania po kodzie kraju
+        TextField(
+            value = countryCode,
+            onValueChange = { newValue ->
+                countryCode = newValue.uppercase()
+            },
+            label = { Text("Enter Country Code") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-            Button(
-                onClick = {
-                    if (swiftCode.isNotBlank()) {
-                        Log.d("BUTTON_CLICK", "Button clicked with SWIFT: $swiftCode")
-                        viewModel.updateSwiftCode(swiftCode)
-                        viewModel.getBanks()
-                        hideKeyboard(context, view)
-                    }
+        // 🔹 Przycisk do wyszukiwania po kraju
+        Button(
+            onClick = {
+                if (countryCode.isNotBlank()) {
+                    viewModel.getBanksByCountry(countryCode)
+                    hideKeyboard(context, view)
                 }
-            ) {
-                Text("Search")
             }
+        ) {
+            Text("Search by Country")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Wyświetlanie odpowiedzi
+        // 🔹 Wyniki dla wyszukiwania po kraju
+        when (countryState) {
+            is CountryUiState.Success -> {
+                val country = (countryState as CountryUiState.Success).country
+
+                Text(text = "Country Name: ${country.countryName}", fontWeight = FontWeight.Bold)
+                Text(text = "Country ISO Code: ${country.countryISO2}")
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Banks in ${country.countryName}:", fontWeight = FontWeight.Bold)
+
+                country.swiftCodes.forEach { bank ->
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(text = "• Bank Name: ${bank.bankName}", fontWeight = FontWeight.Bold)
+                        Text(text = "  Address: ${bank.address}")
+                        Text(text = "  SWIFT Code: ${bank.swiftCode}")
+                        Text(text = "  Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}")
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            }
+            is CountryUiState.Error -> {
+                Text(text = (countryState as CountryUiState.Error).message, color = Color.Red)
+            }
+            else -> {}
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🔹 TextField do wyszukiwania po SWIFT
+        TextField(
+            value = swiftCode,
+            onValueChange = { newValue ->
+                swiftCode = newValue.uppercase()
+            },
+            label = { Text("Enter SWIFT Code") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // 🔹 Przycisk do wyszukiwania po SWIFT
+        Button(
+            onClick = {
+                if (swiftCode.isNotBlank()) {
+                    viewModel.updateSwiftCode(swiftCode)
+                    viewModel.getBanks()
+                    hideKeyboard(context, view)
+                }
+            }
+        ) {
+            Text("Search by SWIFT")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🔹 Wyniki dla wyszukiwania po SWIFT
         when (uiState) {
             is BankUiState.Success -> {
                 val bank = (uiState as BankUiState.Success).banks
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Bank Name: ${bank.bankName}")
-                    Text(text = "Address: ${bank.address.ifBlank { "N/A" }}")
+                Column {
+                    Text(text = "Bank Name: ${bank.bankName}", fontWeight = FontWeight.Bold)
+                    Text(text = "Address: ${bank.address}")
                     Text(text = "Country: ${bank.countryName} (${bank.countryISO2})")
                     Text(text = "Swift Code: ${bank.swiftCode}")
                     Text(text = "Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}")
                 }
             }
-            is BankUiState.Loading -> { /* Puste ładowanie */ }
             is BankUiState.Error -> {
-                val errorMessage = (uiState as BankUiState.Error).message
-                Text(
-                    text = errorMessage,
-                    color = Color.Red,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = (uiState as BankUiState.Error).message, color = Color.Red)
             }
+            else -> {}
         }
     }
 }
-
-
