@@ -9,9 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.bicfrontend.R
 import com.example.bicfrontend.ui.theme.hideKeyboard
 import com.example.bicfrontend.viewmodels.BankUiState
 import com.example.bicfrontend.viewmodels.BanksViewModel
@@ -29,37 +31,47 @@ fun SearchBySwiftScreen(viewModel: BanksViewModel, navController: NavController)
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Back to Home")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = swiftCode,
-            onValueChange = { newValue -> swiftCode = newValue.uppercase() },
-            label = { Text("Enter SWIFT Code") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = {
-                if (swiftCode.isNotBlank()) {
-                    viewModel.updateSwiftCode(swiftCode)
-                    viewModel.getBanks()
-                    hideKeyboard(context, view)
-                }
+        Row (
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxHeight()
+        ){
+            IconButton(onClick = { navController.popBackStack() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = "back",
+                )
             }
-        ) {
-            Text("Search by SWIFT")
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row (
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            TextField(
+                value = swiftCode,
+                onValueChange = { newValue -> swiftCode = newValue.uppercase() },
+                label = { Text("Enter SWIFT Code") },
+                modifier = Modifier.width(250.dp)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                modifier = Modifier.fillMaxSize().height(55.dp),
+                onClick = {
+                    if (swiftCode.isNotBlank()) {
+                        viewModel.updateSwiftCode(swiftCode)
+                        viewModel.getBanks()
+                        hideKeyboard(context, view)
+                    }
+                }
+            ) {
+                Text("Search")
+            }
+        }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 

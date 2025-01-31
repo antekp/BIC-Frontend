@@ -10,9 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.bicfrontend.R
 import com.example.bicfrontend.ui.theme.hideKeyboard
 import com.example.bicfrontend.viewmodels.BanksViewModel
 import com.example.bicfrontend.viewmodels.CountryUiState
@@ -29,37 +31,45 @@ fun SearchByCountryScreen(viewModel: BanksViewModel, navController: NavControlle
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Back to Home")
+        Row (
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.fillMaxHeight()
+        ){
+            IconButton(onClick = { navController.popBackStack() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = "back",
+                )
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = countryCode,
-            onValueChange = { newValue -> countryCode = newValue.uppercase() },
-            label = { Text("Enter Country Code") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
         Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            onClick = {
-                if (countryCode.isNotBlank()) {
-                    viewModel.getBanksByCountry(countryCode)
-                    hideKeyboard(context, view)
-                }
-            }
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Search by Country")
+            TextField(
+                value = countryCode,
+                onValueChange = { newValue -> countryCode = newValue.uppercase() },
+                label = { Text("Enter Country Code") },
+                modifier = Modifier.width(250.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                modifier = Modifier.fillMaxSize().height(55.dp),
+                onClick = {
+                    if (countryCode.isNotBlank()) {
+                        viewModel.getBanksByCountry(countryCode)
+                        hideKeyboard(context, view)
+                    }
+                }
+            ) {
+                Text("Search")
+            }
         }
-
         Spacer(modifier = Modifier.height(16.dp))
 
         when (countryState) {

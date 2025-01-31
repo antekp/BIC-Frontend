@@ -12,7 +12,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import com.example.bicfrontend.R
 import com.example.bicfrontend.viewmodels.BanksViewModel
 
 import kotlinx.coroutines.launch
@@ -30,50 +32,58 @@ fun DeleteBankScreen(navController: NavController, viewModel: BanksViewModel = r
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Top
     ) {
-        Button(
-            onClick = { navController.popBackStack() },
+        Row (
+            horizontalArrangement = Arrangement.Start,
             modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Back to Home")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = swiftCode,
-            onValueChange = { swiftCode = it.uppercase() },
-            label = { Text("Enter SWIFT Code to Delete") },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = {
-                keyboardController?.hide()
-            }),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = {
-                if (swiftCode.isNotBlank()) {
-                    coroutineScope.launch {
-                        val result = viewModel.deleteBank(swiftCode)
-                        val message = if (result) {
-                            "Bank with SWIFT: $swiftCode deleted successfully"
-                        } else {
-                            "No bank found with SWIFT: $swiftCode"
-                        }
-                        snackbarHostState.showSnackbar(message)
-                        swiftCode = ""
-                    }
-                    keyboardController?.hide()
-                }
+        ){
+            IconButton(onClick = { navController.popBackStack() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = "back",
+                )
             }
-        ) {
-            Text("Delete Bank")
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            TextField(
+                value = swiftCode,
+                onValueChange = { swiftCode = it.uppercase() },
+                label = { Text("Enter SWIFT Code to Delete") },
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide()
+                }),
+                modifier = Modifier.width(250.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Button(
+                modifier = Modifier.height(55.dp),
+                onClick = {
+                    if (swiftCode.isNotBlank()) {
+                        coroutineScope.launch {
+                            val result = viewModel.deleteBank(swiftCode)
+                            val message = if (result) {
+                                "Bank with SWIFT: $swiftCode deleted successfully"
+                            } else {
+                                "No bank found with SWIFT: $swiftCode"
+                            }
+                            snackbarHostState.showSnackbar(message)
+                            swiftCode = ""
+                        }
+                        keyboardController?.hide()
+                    }
+                }
+            ) {
+                Text("Delete")
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
 
         SnackbarHost(hostState = snackbarHostState)

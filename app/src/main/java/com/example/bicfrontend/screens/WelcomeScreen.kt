@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
@@ -25,36 +28,36 @@ fun WelcomeScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Welcome to the Bank Search App", style = MaterialTheme.typography.headlineMedium)
+        Text(text = "Bank Search App", style = MaterialTheme.typography.headlineLarge)
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
             onClick = { navController.navigate("search_by_swift") },
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
-            Text(text = "Search by SWIFT Code")
+            Text(text = "Search by SWIFT Code", fontSize = 16.sp)
         }
 
         Button(
             onClick = { navController.navigate("search_by_country") },
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
-            Text(text = "Search by Country")
+            Text(text = "Search by Country",fontSize = 16.sp)
         }
 
         Button(
             onClick = { navController.navigate("delete_bank") },
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
-            Text(text = "Delete Bank")
+            Text(text = "Delete Bank",fontSize = 16.sp)
         }
 
         Button(
             onClick = { navController.navigate("insert_bank") },
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
-            Text(text = "Insert Bank")
+            Text(text = "Insert Bank",fontSize = 16.sp)
         }
     }
 }
