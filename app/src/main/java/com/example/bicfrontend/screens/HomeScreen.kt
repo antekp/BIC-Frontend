@@ -16,9 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+
 import androidx.compose.ui.unit.dp
 import com.example.bicfrontend.R
+import com.example.bicfrontend.network.BankResponse
+
 import com.example.bicfrontend.viewmodels.BankUiState
 
 @Composable
@@ -32,13 +34,13 @@ fun HomeScreen(
             BICUiState.banks, modifier = modifier.fillMaxWidth()
         )
         is BankUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is BankUiState.Error -> ErrorScreen( modifier = modifier.fillMaxSize())
+        is BankUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
     }
 }
 
 
 @Composable
-fun ResultScreen(banks: String, modifier: Modifier = Modifier) {
+fun ResultScreen(bank: BankResponse, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -49,7 +51,11 @@ fun ResultScreen(banks: String, modifier: Modifier = Modifier) {
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
         ) {
-            Text(text = banks)
+            Text(text = "Bank Name: ${bank.bankName}")
+            Text(text = "Address: ${bank.address}")
+            Text(text = "Country: ${bank.countryName} (${bank.countryISO2})")
+            Text(text = "Swift Code: ${bank.swiftCode}")
+            Text(text = "Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}")
         }
     }
 }
