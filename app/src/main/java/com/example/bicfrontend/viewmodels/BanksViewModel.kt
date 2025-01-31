@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bicfrontend.network.BanksApi
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class BanksViewModel : ViewModel() {
-    var BICUiState: String by mutableStateOf("")
+    var BICUiState: BankUiState by mutableStateOf(BankUiState.Loading)
         private set
 
 
@@ -20,8 +21,19 @@ class BanksViewModel : ViewModel() {
 
     private fun getBanks() {
         viewModelScope.launch {
-            val listResult = BanksApi.retrofitService.getBanks()
-            BICUiState = listResult
+            try {
+                val listResult = BanksApi.retrofitService.getBanks()
+                BICUiState = BankUiState.Success(listResult)
+            }
+            catch (e: IOException){
+                BICUiState = BankUiState.Error
+            }
+
         }
     }
+}
+sealed interface BankUiState{
+    data class Success(val banks: String): BankUiState
+    object Error: BankUiState
+    object Loading: BankUiState
 }
