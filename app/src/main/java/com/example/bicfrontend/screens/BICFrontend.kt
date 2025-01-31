@@ -8,7 +8,6 @@ import com.example.bicfrontend.viewmodels.BanksViewModel
 @Composable
 fun BICFrontend(modifier: Modifier = Modifier) {
     val banksViewModel: BanksViewModel = viewModel()
-    HomeScreen(
-        BICUiState = banksViewModel.BICUiState
-    )
+
+    HomeScreen(viewModel = banksViewModel)
 }
