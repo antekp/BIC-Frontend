@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+
 
 @Composable
-fun WelcomeScreen(navController: NavController) {
+fun WelcomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,28 +33,28 @@ fun WelcomeScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { navController.navigate("search_by_swift") },
+            onClick = {},
             modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
             Text(text = "Search by SWIFT Code", fontSize = 16.sp)
         }
 
         Button(
-            onClick = { navController.navigate("search_by_country") },
+            onClick = {},
             modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
             Text(text = "Search by Country",fontSize = 16.sp)
         }
 
         Button(
-            onClick = { navController.navigate("delete_bank") },
+            onClick = {},
             modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
             Text(text = "Delete Bank",fontSize = 16.sp)
         }
 
         Button(
-            onClick = { navController.navigate("insert_bank") },
+            onClick = {},
             modifier = Modifier.fillMaxWidth().padding(8.dp).size(64.dp)
         ) {
             Text(text = "Insert Bank",fontSize = 16.sp)

@@ -20,7 +20,7 @@ import com.example.bicfrontend.viewmodels.BanksViewModel
 
 
 @Composable
-fun SearchBySwiftScreen(viewModel: BanksViewModel, navController: NavController) {
+fun SearchBySwiftScreen(viewModel: BanksViewModel) {
     var swiftCode by remember { mutableStateOf("") }
     val uiState by remember { derivedStateOf { viewModel.BICUiState } }
     val context = LocalContext.current
@@ -32,18 +32,6 @@ fun SearchBySwiftScreen(viewModel: BanksViewModel, navController: NavController)
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxHeight()
-        ){
-            IconButton(onClick = { navController.popBackStack() }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
-                    contentDescription = "back",
-                )
-            }
-        }
         Spacer(modifier = Modifier.height(8.dp))
         Row (
             modifier = Modifier.fillMaxSize(),

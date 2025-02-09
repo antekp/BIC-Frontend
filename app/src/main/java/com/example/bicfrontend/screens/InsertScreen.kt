@@ -17,7 +17,7 @@ import com.example.bicfrontend.viewmodels.BanksViewModel
 import com.example.bicfrontend.viewmodels.ResultState
 
 @Composable
-fun InsertBankScreen(viewModel: BanksViewModel, navController: NavController) {
+fun InsertBankScreen(viewModel: BanksViewModel) {
     var countryISO2 by remember { mutableStateOf("") }
     var swiftCode by remember { mutableStateOf("") }
     var bankName by remember { mutableStateOf("") }
@@ -77,12 +77,6 @@ fun InsertBankScreen(viewModel: BanksViewModel, navController: NavController) {
             is ResultState.Success -> Text(text = insertState.message, color = Color.Green)
             is ResultState.Error -> Text(text = insertState.message, color = Color.Red)
             else -> {}
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { navController.navigate("welcome") }) {
-            Text("Back to Home")
         }
     }
 }

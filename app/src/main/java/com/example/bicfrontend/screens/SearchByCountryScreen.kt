@@ -20,7 +20,7 @@ import com.example.bicfrontend.viewmodels.BanksViewModel
 import com.example.bicfrontend.viewmodels.CountryUiState
 
 @Composable
-fun SearchByCountryScreen(viewModel: BanksViewModel, navController: NavController) {
+fun SearchByCountryScreen(viewModel: BanksViewModel) {
     var countryCode by remember { mutableStateOf("") }
     val countryState by remember { derivedStateOf { viewModel.countryUiState } }
     val context = LocalContext.current
@@ -32,20 +32,6 @@ fun SearchByCountryScreen(viewModel: BanksViewModel, navController: NavControlle
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxHeight()
-        ){
-            IconButton(onClick = { navController.popBackStack() }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
-                    contentDescription = "back",
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DeleteBankScreen(navController: NavController, viewModel: BanksViewModel = remember { BanksViewModel() }) {
+fun DeleteBankScreen(viewModel: BanksViewModel = remember { BanksViewModel() }) {
     var swiftCode by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -34,18 +34,6 @@ fun DeleteBankScreen(navController: NavController, viewModel: BanksViewModel = r
             .padding(16.dp),
         verticalArrangement = Arrangement.Top
     ) {
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ){
-            IconButton(onClick = { navController.popBackStack() }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
-                    contentDescription = "back",
-                )
-            }
-        }
         Spacer(modifier = Modifier.height(8.dp))
         Row (
             modifier = Modifier.fillMaxWidth(),
