@@ -3,7 +3,9 @@ package com.example.bicfrontend
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,6 +19,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.bicfrontend.navigation.ContentScreen
 import com.example.bicfrontend.navigation.listOfNavigationItems
+import com.example.bicfrontend.ui.theme.BackgroundColor
+import com.example.bicfrontend.ui.theme.BottomBarIcon
+import com.example.bicfrontend.ui.theme.BottomBoxColor
+import com.example.bicfrontend.ui.theme.BoxColor
+import com.example.bicfrontend.ui.theme.OrangeFill
 import com.example.bicfrontend.viewmodels.BanksViewModel
 
 
@@ -28,10 +35,12 @@ class MainActivity : ComponentActivity() {
             var selectedItemIndex by rememberSaveable {
                 mutableStateOf(0)
             }
-            Surface {
+            Surface{
                 Scaffold(
                     bottomBar = {
-                        NavigationBar {
+                        NavigationBar(
+                            containerColor = BottomBoxColor
+                        ) {
                             listOfNavigationItems.forEachIndexed { index, item ->
                                 NavigationBarItem(
                                     selected = selectedItemIndex == index,
@@ -39,13 +48,16 @@ class MainActivity : ComponentActivity() {
                                         selectedItemIndex = index
                                     },
                                     icon = {
-                                        Icon(
+                                        BottomBarIcon(
                                             item.icon,
-                                            contentDescription = ""
+                                            item.title
                                         )
                                     },
                                     label = {
-                                        Text(text = item.title)
+                                        Text(
+                                            text = item.title,
+                                            color = OrangeFill
+                                        )
                                     }
                                 )
                             }
