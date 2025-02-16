@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.bicfrontend.navigation.ContentScreen
 import com.example.bicfrontend.navigation.listOfNavigationItems
 import com.example.bicfrontend.ui.theme.BackgroundColor
@@ -39,10 +41,19 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     bottomBar = {
                         NavigationBar(
-                            containerColor = BottomBoxColor
+                            containerColor = BottomBoxColor,
                         ) {
                             listOfNavigationItems.forEachIndexed { index, item ->
                                 NavigationBarItem(
+                                    colors = NavigationBarItemColors(
+                                        BackgroundColor,
+                                        BackgroundColor,
+                                        BackgroundColor,
+                                        BottomBoxColor,
+                                        Color.White,
+                                        BottomBoxColor,
+                                        Color.White
+                                    ),
                                     selected = selectedItemIndex == index,
                                     onClick = {
                                         selectedItemIndex = index

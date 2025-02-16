@@ -1,5 +1,6 @@
 package com.example.bicfrontend.ui.theme
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon

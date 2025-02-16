@@ -1,20 +1,29 @@
 package com.example.bicfrontend.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.bicfrontend.R
+import com.example.bicfrontend.ui.theme.BackgroundColor
+import com.example.bicfrontend.ui.theme.BottomBoxColor
+import com.example.bicfrontend.ui.theme.BoxColor
+import com.example.bicfrontend.ui.theme.OrangeFill
 import com.example.bicfrontend.ui.theme.hideKeyboard
 import com.example.bicfrontend.viewmodels.BanksViewModel
 import com.example.bicfrontend.viewmodels.CountryUiState
@@ -29,23 +38,36 @@ fun SearchByCountryScreen(viewModel: BanksViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = BackgroundColor)
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
         ) {
             TextField(
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
                 value = countryCode,
                 onValueChange = { newValue -> countryCode = newValue.uppercase() },
-                label = { Text("Enter Country Code") },
+                label = { Text("Enter Country Code", color = Color.White) },
                 modifier = Modifier.width(250.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                modifier = Modifier.fillMaxSize().height(55.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .height(55.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(width = 2.dp, color = OrangeFill, shape = RoundedCornerShape(16.dp))
+                    .background(color = BottomBoxColor),
+                colors = ButtonColors(
+                    containerColor = BottomBoxColor,
+                    contentColor = OrangeFill,
+                    disabledContentColor = OrangeFill,
+                    disabledContainerColor = BottomBoxColor
+                ),
                 onClick = {
                     if (countryCode.isNotBlank()) {
                         viewModel.getBanksByCountry(countryCode)
@@ -80,4 +102,11 @@ fun SearchByCountryScreen(viewModel: BanksViewModel) {
             else -> {}
         }
     }
+}
+
+@Preview
+@Composable
+private fun SearchByCountryPreview() {
+    val viewModel = BanksViewModel()
+    SearchByCountryScreen(viewModel)
 }
