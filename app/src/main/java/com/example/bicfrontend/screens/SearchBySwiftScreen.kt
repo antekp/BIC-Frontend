@@ -48,7 +48,7 @@ fun SearchBySwiftScreen(viewModel: BanksViewModel) {
         ){
             TextField(
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
                 value = swiftCode,
                 onValueChange = { newValue -> swiftCode = newValue.uppercase() },
                 modifier = Modifier
@@ -89,23 +89,55 @@ fun SearchBySwiftScreen(viewModel: BanksViewModel) {
             is BankUiState.Success -> {
                 val bank = (uiState as BankUiState.Success).banks
 
-                Column {
-                    Text(text = "Bank Name: ${bank.bankName}", fontWeight = FontWeight.Bold)
-                    Text(text = "Address: ${bank.address.ifBlank { "N/A" }}")
-                    Text(text = "Country: ${bank.countryName} (${bank.countryISO2})")
-                    Text(text = "Swift Code: ${bank.swiftCode}")
-                    Text(text = "Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}")
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(color = BottomBoxColor)
+                            .fillMaxSize()
+                            .border(color = OrangeFill, width = 2.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Text(text = "Bank Name: ${bank.bankName}", fontWeight = FontWeight.Bold, color = Color.White)
+                            Text(text = "Address: ${bank.address.ifBlank { "N/A" }}", color = Color.White)
+                            Text(text = "Country: ${bank.countryName} (${bank.countryISO2})", color = Color.White)
+                            Text(text = "Swift Code: ${bank.swiftCode}", color = Color.White)
+                            Text(text = "Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}", color = Color.White)
+                        }
+                    }
 
                     if (bank.isHeadquarter && !bank.branches.isNullOrEmpty()) {
                         Spacer(modifier = Modifier.height(16.dp))
-                        Text(text = "Branches:", fontWeight = FontWeight.Bold)
+                        Box(
+                            modifier = Modifier
+                                .background(color = BottomBoxColor)
+                                .fillMaxSize()
+                                .border(color = OrangeFill, width = 2.dp)
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(8.dp),
+                                text = "Branches:", fontWeight = FontWeight.Bold, color = Color.White
+                            )
+                        }
 
                         bank.branches.forEach { branch ->
-                            Column(modifier = Modifier.padding(8.dp)) {
-                                Text(text = "• Branch Name: ${branch.bankName}", fontWeight = FontWeight.Bold)
-                                Text(text = "  Address: ${branch.address.ifBlank { "N/A" }}")
-                                Text(text = "  SWIFT Code: ${branch.swiftCode}")
-                                Spacer(modifier = Modifier.height(8.dp))
+                            Box(modifier = Modifier
+                                .padding(top = 8.dp, bottom = 8.dp)
+                                .background(color = BottomBoxColor)
+                                .border(color = OrangeFill, width = 2.dp)) {
+                                Column(modifier = Modifier.padding(8.dp)) {
+                                    Text(
+                                        text = "• Branch Name: ${branch.bankName}",
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White
+                                    )
+                                    Text(text = "  Address: ${branch.address.ifBlank { "N/A" }}",color = Color.White)
+                                    Text(text = "  SWIFT Code: ${branch.swiftCode}",color = Color.White)
+                                }
                             }
                         }
                     }

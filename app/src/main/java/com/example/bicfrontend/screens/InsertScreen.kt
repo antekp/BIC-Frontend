@@ -48,14 +48,14 @@ fun InsertBankScreen(viewModel: BanksViewModel) {
         Spacer(modifier = Modifier.height(64.dp))
         TextField(value = countryISO2,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
             onValueChange = { countryISO2 = it.uppercase() },
             label = { Text("Country ISO2", color = Color.White) },
             modifier = Modifier.padding(4.dp))
 
         TextField(value = swiftCode,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
             onValueChange = {
                 swiftCode = it.uppercase()
                 if(swiftCode.endsWith("XXX",ignoreCase = true)){
@@ -68,28 +68,28 @@ fun InsertBankScreen(viewModel: BanksViewModel) {
 
         TextField(value = bankName,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
             onValueChange = { bankName = it.uppercase() },
             label = { Text("Bank Name", color = Color.White) },
             modifier = Modifier.padding(4.dp))
 
         TextField(value = address,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
             onValueChange = { address = it.uppercase() },
             label = { Text("Address", color = Color.White) },
             modifier = Modifier.padding(4.dp))
 
         TextField(value = townName,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
             onValueChange = { townName = it.uppercase() },
             label = { Text("Town Name", color = Color.White) },
             modifier = Modifier.padding(4.dp))
 
         TextField(value = countryName,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+            colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
             onValueChange = { countryName = it.uppercase() },
             label = { Text("Country Name", color = Color.White) },
             modifier = Modifier.padding(4.dp))

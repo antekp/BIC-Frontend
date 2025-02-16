@@ -1,5 +1,6 @@
 package com.example.bicfrontend.screens
 
+import android.text.Layout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -44,11 +45,11 @@ fun SearchByCountryScreen(viewModel: BanksViewModel) {
     ) {
         Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             TextField(
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
                 value = countryCode,
                 onValueChange = { newValue -> countryCode = newValue.uppercase() },
                 label = { Text("Enter Country Code", color = Color.White) },
@@ -83,15 +84,52 @@ fun SearchByCountryScreen(viewModel: BanksViewModel) {
         when (countryState) {
             is CountryUiState.Success -> {
                 val country = (countryState as CountryUiState.Success).country
-                Column {
-                    Text(text = "Country Name: ${country.countryName}", fontWeight = FontWeight.Bold)
-                    Text(text = "Country ISO Code: ${country.countryISO2}")
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Box (
+                        modifier = Modifier
+                            .background(color = BottomBoxColor)
+                            .fillMaxSize()
+                            .border(color = OrangeFill, width = 2.dp)
+                    ){
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Text(
+                                text = "Country Name: ${country.countryName}",
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            Text(
+                                text = "Country ISO Code: ${country.countryISO2}",
+                                color = Color.White
+                            )
+                        }
+                    }
+
                     country.swiftCodes.forEach { bank ->
-                        Column(modifier = Modifier.padding(8.dp)) {
-                            Text(text = "• Bank Name: ${bank.bankName}", fontWeight = FontWeight.Bold)
-                            Text(text = "  Address: ${bank.address}")
-                            Text(text = "  SWIFT Code: ${bank.swiftCode}")
-                            Text(text = "  Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}")
+                        Box(modifier = Modifier
+                            .padding(top = 8.dp, bottom = 8.dp)
+                            .background(color = BottomBoxColor)
+                            .border(color = OrangeFill, width = 2.dp)) {
+                            Column(
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier.padding(8.dp)
+                            ) {
+                                Text(
+                                    text = "• Bank Name: ${bank.bankName}",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                                Text(text = "  Address: ${bank.address}", color = Color.White)
+                                Text(text = "  SWIFT Code: ${bank.swiftCode}", color = Color.White)
+                                Text(
+                                    text = "  Headquarter: ${if (bank.isHeadquarter) "Yes" else "No"}",
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
                 }

@@ -50,7 +50,7 @@ fun DeleteBankScreen(viewModel: BanksViewModel = remember { BanksViewModel() }) 
         ){
             TextField(
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor),
+                colors = TextFieldDefaults.colors(focusedContainerColor = BoxColor,unfocusedContainerColor = BoxColor, focusedIndicatorColor = BackgroundColor, unfocusedIndicatorColor = BackgroundColor),
                 value = swiftCode,
                 onValueChange = { swiftCode = it.uppercase() },
                 label = { Text("Enter SWIFT Code to Delete", color = Color.White) },
